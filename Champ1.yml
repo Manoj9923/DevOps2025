@@ -6,15 +6,15 @@ jobs:
   hello: 
     runs-on: self-hosted
     steps:
-      - name: print message
+      - name: print message job1
         run: |
           echo "Hello ${{ vars.NAME }}"
           echo "My Repository name is  ${{ github.repository }}"
-      - name: print message 2
+      - name: print message 2 job2
         run: |
           echo "Your Designation is ${{ vars.DESIG }}"
           echo "My Repository name is  ${{ github.workflow }}"
-      - name: print message like step 3
+      - name: print message like step 3 job3
         run: |
           echo "Your are going to join at ${{ vars.COMPANY }}"
           echo "My Secreate value is  ${{ secrets.MY_KEY }}"

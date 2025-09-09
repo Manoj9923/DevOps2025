@@ -21,5 +21,5 @@ jobs:
       - name: print message JOB 4
         run: |
            echo "my contact number is ${{ vars.CONTACT }}"
-           echo "My current contact number is ${{ vars.CONTACT }}"
+           
           

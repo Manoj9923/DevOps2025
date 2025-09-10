@@ -1,4 +1,4 @@
-name: Install XAMPP on Linux Server
+name: Install XAMPP on Linux 9 Server
 on:
   workflow_dispatch:
     inputs:

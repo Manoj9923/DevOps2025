@@ -30,4 +30,3 @@ jobs:
             sudo /opt/lampp/lampp start
             echo "XAMPP services started."               
             echo "XAMPP installed successfully."
-

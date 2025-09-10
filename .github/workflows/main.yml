@@ -1,25 +1,33 @@
-name: Hello World
-
-on: [push]
-
+name: Install XAMPP on Linux 9 Server
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: "Target server hostname or IP"
+        required: true
+      user:
+        description: "SSH username"
+        required: true
 jobs:
-  hello: 
-    runs-on: ubuntu-latest
-    steps:
-      - name: print message job1
-        run: |
-          echo "Hello ${{ vars.NAME }}"
-          echo "My Repository name is  ${{ github.repository }}"
-      - name: print message 2 job2
-        run: |
-          echo "Your Designation is ${{ vars.DESIG }}"
-          echo "My Repository name is  ${{ github.workflow }}"
-      - name: print message like step 3 job3
-        run: |
-          echo "Your are going to join at ${{ vars.COMPANY }}"
-          echo "My Secreate value is  ${{ secrets.MY_KEY }}"
-      - name: print message JOB 4
-        run: |
-           echo "my contact number is ${{ vars.CONTACT }}"
-           
-          
+   install-xampp:
+      runs-on: self-hosted
+      steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install XAMPP on server
+        uses: appleboy/ssh-action@v1.0.3   # Docker-free version for RHEL 9
+        with:
+          host: ${{ github.event.inputs.server }}
+          username: ${{ github.event.inputs.user }}
+          key: ${{ secrets.SSH_PRIVATE_KEY })
+          script: |
+            echo "Downloading and installing XAMPP ... "
+            wget https://www.apachefriends.org/xampp-files/8.2.12/xampp-linux-x64-8.2.12-0-installer.run -O /tmp/xampp-installer.run
+            chmod +x /tmp/xampp-installer.run
+            sudo /tmp/xampp-installer.run -- mode unattended
+            echo "XAMPP installed successfully."   
+            # Start XAMPP services
+            sudo /opt/lampp/lampp start
+            echo "XAMPP services started."               
+            echo "XAMPP installed successfully."
+

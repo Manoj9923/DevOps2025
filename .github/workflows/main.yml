@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
       - name: Install XAMPP on server
-        uses: appleboy/ssh-action@v1.0.3   # Docker-free version for RHEL 9
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ github.event.inputs.server }}
           username: ${{ github.event.inputs.user }}

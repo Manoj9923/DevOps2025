@@ -1,4 +1,5 @@
 name: Install XAMPP on Linux Server
+
 on:
   workflow_dispatch:
     inputs:
@@ -11,13 +12,13 @@ on:
 
 jobs:
   install-xampp:
-    runs-on: self-hosted
+    runs-on: self-hosted   # Use your Linux runner
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Install XAMPP on server
-        uses: appleboy/ssh-action@master 
+        uses: appleboy/ssh-action@v1.0.3   # This version works without Docker
         with:
           host: ${{ github.event.inputs.server }}
           username: ${{ github.event.inputs.user }}
@@ -27,9 +28,8 @@ jobs:
             wget https://www.apachefriends.org/xampp-files/8.2.12/xampp-linux-x64-8.2.12-0-installer.run -O /tmp/xampp-installer.run
             chmod +x /tmp/xampp-installer.run
             sudo /tmp/xampp-installer.run --mode unattended
-            echo "XAMPP installed successfully."
+            echo "✅ XAMPP installed successfully."
+
             # Start XAMPP services
             sudo /opt/lampp/lampp start
-            echo "XAMPP services started."
-
-
+            echo "✅ XAMPP services started."

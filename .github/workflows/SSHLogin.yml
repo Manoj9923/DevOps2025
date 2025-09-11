@@ -12,12 +12,12 @@ on:
         required: true
 
 jobs:
-  SSH CONFIGURATION:
+  SSH-CONFIGURATION:
     runs-on: self-hosted   # Use your Linux runner
     steps:
      - name: Configure SSH
-        uses: appleboy/ssh-action
-        with:
+       uses: appleboy/ssh-action@v0.1.10
+       with:
           host: ${{ github.event.inputs.server }}
           username: ${{ github.event.inputs.user }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}

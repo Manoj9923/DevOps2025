@@ -1,5 +1,5 @@
 
-name: Configure SSH
+name: Configure & Installing Apache
 
 on:
   workflow_dispatch:
@@ -23,12 +23,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "Downloading and installing Apache ... "
-            cd /home/admin/
-            mkdir apache
-            cd apache
-            wget https://downloads.apache.org/httpd/httpd-2.4.65.tar.gz
-            tar -xvzf httpd-2.4.65.tar.gz
-            chmod +x /home/admin/apache
+            su root
+            key: ${{ secrets.ROOT_PASSWORD }}
+            yum update all
+            yum install apache -y
             echo "Apache installed successfully."
             
          

@@ -1,5 +1,5 @@
 
-name: Configure & Installing Apache
+name: Configure & Installing XAMPP
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
         required: true
 
 jobs:
-  Apache-CONFIGURATION:
+  XAMPP-CONFIGURATION:
     runs-on: self-hosted   # Use your Linux runner
     steps:
      - name: apache Configure 

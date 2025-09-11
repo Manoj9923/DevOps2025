@@ -12,10 +12,10 @@ on:
         required: true
 
 jobs:
-  SSH-CONFIGURATION:
+  Apache-CONFIGURATION:
     runs-on: self-hosted   # Use your Linux runner
     steps:
-     - name: Configure SSH
+     - name: apache Configure 
        uses: appleboy/ssh-action@master
        with:
           host: ${{ github.event.inputs.server }}
@@ -23,10 +23,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "Downloading and installing Apache ... "
-            with:
-            host: ${{ github.event.inputs.server }}
-            username: root
-            key: ${{ secrets.ROOT_SSH_KEY }}
+       with:
+          host: ${{ github.event.inputs.server }}
+          username: root
+          key: ${{ secrets.ROOT_SSH_KEY }}
             yum update all
             yum install apache -y
             echo "Apache installed successfully."

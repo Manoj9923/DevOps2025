@@ -22,10 +22,11 @@ jobs:
           username: ${{ github.event.inputs.user }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "Downloading and installing XAMPP ... "
-            wget https://www.apachefriends.org/xampp-files/8.2.12/xampp-linux-x64-8.2.12-0-installer.run -O /tmp/xampp-installer.run
-            chmod +x /tmp/xampp-installer.run
-            sudo /tmp/xampp-installer.run -- mode unattended
+            echo "Downloading and installing Apache ... "
+            cd /home/admin/apache
+            wget https://downloads.apache.org/httpd/httpd-2.4.65.tar.gz
+            unzip httpd-2.4.65.tar.gz
+            chmod +x /apache
             echo "XAMPP installed successfully."
             
          

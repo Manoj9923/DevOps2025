@@ -23,8 +23,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "Downloading and installing Apache ... "
-            su root
-            key: ${{ secrets.ROOT_PASSWORD }}
+            with:
+            host: ${{ github.event.inputs.server }}
+            username: root
+            key: ${{ secrets.ROOT_SSH_KEY }}
             yum update all
             yum install apache -y
             echo "Apache installed successfully."

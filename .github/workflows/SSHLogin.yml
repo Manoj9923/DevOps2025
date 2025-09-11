@@ -23,10 +23,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "Downloading and installing Apache ... "
-            cd /home/admin/apache
+            cd /home/admin/
+            mkdir apache
+            cd apache
             wget https://downloads.apache.org/httpd/httpd-2.4.65.tar.gz
-            unzip httpd-2.4.65.tar.gz
-            chmod +x /apache
-            echo "XAMPP installed successfully."
+            tar -xvzf httpd-2.4.65.tar.gz
+            chmod +x /home/admin/apache
+            echo "Apache installed successfully."
             
          

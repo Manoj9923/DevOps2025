@@ -1,0 +1,27 @@
+name : Transfer File to the server
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: "Please enter Target Server IP address"
+        required: true
+      user:
+        description: "Please enter username"
+        required: true
+      target_path:
+        required: true
+        default: /opt/lampp/htdocs/
+jobs:
+  Transfer_File_Server:
+    runs-on: self-hosted   
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Transfer directory
+        uses: appleboy/scp-action@v-.1.7
+        with:
+          host: ${{ github.event.inputs.server }}
+          username: ${{ github.event.inputs.user }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "manoj_temprepo/*"
+          target: ${{github.event.inputs.target_path}}

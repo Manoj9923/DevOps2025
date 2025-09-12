@@ -23,5 +23,5 @@ jobs:
           host: ${{ github.event.inputs.server }}
           username: ${{ github.event.inputs.user }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "manoj_temprepo/*"
+          source: "manoj_temprepo/**"
           target: ${{github.event.inputs.target_path}}

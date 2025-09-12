@@ -1,4 +1,4 @@
-name : Transfer File to the server
+name: Transfer File to the server
 on:
   workflow_dispatch:
     inputs:
@@ -11,17 +11,25 @@ on:
       target_path:
         required: true
         default: /opt/lampp/htdocs/
+
 jobs:
   Transfer_File_Server:
     runs-on: self-hosted   
     steps:
-      - name: Checkout Repo
+      - name: Checkout current repo
         uses: actions/checkout@v3
-      - name: Transfer directory
+
+      - name: Checkout another repo (manoj_temprepo)
+        uses: actions/checkout@v3
+        with:
+          repository: Manoj9923/manoj_temprepo
+          path: other-repo
+
+      - name: Transfer file
         uses: appleboy/scp-action@v1
         with:
           host: ${{ github.event.inputs.server }}
           username: ${{ github.event.inputs.user }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "manoj_temprepo/git.docx"
-          target: ${{github.event.inputs.target_path}}
+          source: "other-repo/git.docx"
+          target: ${{ github.event.inputs.target_path }}

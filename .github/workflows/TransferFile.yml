@@ -19,11 +19,11 @@ jobs:
       - name: Checkout current repo
         uses: actions/checkout@v3
 
-      - name: Checkout another repo (manoj_temprepo)
-        uses: actions/checkout@v3
-        with:
-          repository: Manoj9923/manoj_temprepo
-          path: other-repo
+      #- name: Checkout another repo (manoj_temprepo)
+       # uses: actions/checkout@v3
+      #  with:
+       #   repository: Manoj9923/manoj_temprepo
+       #   path: other-repo
 
       - name: Transfer file
         uses: appleboy/scp-action@v1
@@ -31,5 +31,6 @@ jobs:
           host: ${{ github.event.inputs.server }}
           username: ${{ github.event.inputs.user }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "other-repo/git.docx"
+          #source: "other-repo/git.docx"
+          source: "Manoj9923/manoj_temprepo/*"
           target: ${{ github.event.inputs.target_path }}

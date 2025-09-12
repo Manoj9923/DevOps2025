@@ -1,0 +1,36 @@
+name: Installing XAMPP
+
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: "Target server hostname or IP"
+        required: true
+      user:
+        description: "SSH username"
+        required: true
+jobs:
+  XAMPP-INSTALLATION:
+    runs-on: self-hosted   
+        
+    steps:
+    
+     - name: Checkout Repo
+       uses: actions/checkout@v3
+       
+     - name: Install XAMPP On RHEL9 
+       uses: appleboy/ssh-action@master
+       with:
+          host: ${{ github.event.inputs.server }}
+          username: ${{ github.event.inputs.user }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+           echo "Installing XAMPP ... "
+           cd /tmp
+           echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S /tmp/xampp-installer.run --mode unattended
+           echo "XAMPP installed successfully."
+           echo "Start XAMPP"
+           echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S /opt/lampp/lampp start
+           echo "✅ XAMPP services started."
+
+         

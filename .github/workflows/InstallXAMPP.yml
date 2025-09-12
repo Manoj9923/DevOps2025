@@ -25,10 +25,8 @@ jobs:
             echo "Downloading and installing XAMPP ... "
             wget https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run -O /tmp/xampp-installer.run
             chmod +x /tmp/xampp-installer.run
-            sudo /tmp/xampp-installer.run -- mode unattended
-            echo "${{ secrets.SUDO_PASSWORD }}"
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S /tmp/xampp-installer.run -- mode unattended
             echo "XAMPP installed successfully."
             # Start XAMPP services
-            sudo /opt/lampp/lampp start
-            echo "${{ secrets.SUDO_PASSWORD }}"
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S /opt/lampp/lampp start
             echo "✅ XAMPP services started."

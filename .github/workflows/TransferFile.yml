@@ -10,7 +10,7 @@ on:
         required: true
       target_path:
         required: true
-        default: /opt/lampp/htdocs/
+        default: /tmp/Manoj
 
 jobs:
   Transfer_File_Server:

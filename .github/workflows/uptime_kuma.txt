@@ -1,0 +1,86 @@
+name: Install Uptime Kuma on Ubuntu VM
+
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: "Target Ubuntu host (IP/hostname)"
+        required: true
+        default: "192.168.0.112"
+      user:
+        description: "SSH user"
+        default: "admino"
+      ssh_key_path:
+        description: "Private key path on the self-hosted runner"
+        default: "~/.ssh/github_runner_id"
+
+jobs:
+  install-uptime-kuma:
+    runs-on: self-hosted
+    steps:
+      - name: Expand SSH key path
+        run: |
+          KEY_PATH="${{ github.event.inputs.ssh_key_path }}"
+          KEY_PATH="${KEY_PATH/#\~/$HOME}"
+          echo "SSH_KEY=$KEY_PATH" >> $GITHUB_ENV
+
+      - name: Add host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -H "${{ github.event.inputs.server }}" >> ~/.ssh/known_hosts || true
+
+      - name: Test SSH connectivity
+        run: |
+          ssh -i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=5 \
+            "${{ github.event.inputs.user }}"@"${{ github.event.inputs.server }}" \
+            "echo '✅ SSH Connected to $(hostname)'"
+
+      - name: Install Uptime Kuma
+        run: |
+          ssh -i "$SSH_KEY" "${{ github.event.inputs.user }}"@"${{ github.event.inputs.server }}" <<'EOF'
+            set -e
+            # Update & install dependencies
+            sudo apt-get update -y
+            sudo apt-get install -y git curl build-essential
+
+            # Install Node.js LTS
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+
+            # Clone Uptime Kuma if not already
+            if [ ! -d "$HOME/uptime-kuma" ]; then
+              git clone https://github.com/louislam/uptime-kuma.git $HOME/uptime-kuma
+            fi
+
+            cd $HOME/uptime-kuma
+            npm install --production
+
+            # Setup systemd service
+            SERVICE_FILE=/etc/systemd/system/uptime-kuma.service
+            sudo tee $SERVICE_FILE > /dev/null <<SERVICE
+            [Unit]
+            Description=Uptime Kuma
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=${USER}
+            WorkingDirectory=$HOME/uptime-kuma
+            ExecStart=/usr/bin/npm start
+            Restart=always
+            RestartSec=10
+
+            [Install]
+            WantedBy=multi-user.target
+            SERVICE
+
+            sudo systemctl daemon-reexec
+            sudo systemctl enable uptime-kuma
+            sudo systemctl restart uptime-kuma
+          EOF
+
+      - name: Confirm service status
+        run: |
+          ssh -i "$SSH_KEY" "${{ github.event.inputs.user }}"@"${{ github.event.inputs.server }}" \
+            "systemctl is-active uptime-kuma && echo '🎉 Uptime Kuma installed & running at http://${{ github.event.inputs.server }}:3001'"

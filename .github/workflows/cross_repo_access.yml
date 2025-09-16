@@ -11,7 +11,7 @@ on:
         required: true
 
 jobs:
-  deploy:
+  cross-repo-file-delploy:
     runs-on: self-hosted
 
     steps:

@@ -1,0 +1,41 @@
+name: Deploy file from another repo via SSH key
+
+on:
+  workflow_dispatch:
+    inputs:
+      server_ip:
+        description: "Target server IP"
+        required: true
+      server_user:
+        description: "Target server username"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repo A (current DevOps2025)
+        uses: actions/checkout@v3
+
+      - name: Checkout Repo B (Champ2025-private via GitHub deploy key)
+        uses: actions/checkout@v3
+        with:
+          repository: Manoj9923/Champ2025
+          ssh-key: ${{ secrets.GH_DEPLOY_KEY }}   # 👈 deploy key for GitHub
+          ref: main
+          path: repo-champ2025
+          persist-credentials: false
+          ssh-strict: false
+
+      - name: Copy file from Champ2025 repo to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ github.event.inputs.server_ip }}
+          username: ${{ github.event.inputs.server_user }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}     # 👈 key for target server
+          port: 22
+          source: "repo-champ2025/*"
+          target: "/home/admin/project1/"
+          overwrite: true
+          debug: true

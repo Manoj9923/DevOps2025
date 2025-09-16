@@ -35,7 +35,7 @@ jobs:
           username: ${{ github.event.inputs.server_user }}
           key: ${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}     # 👈 key for target server
           port: 22
-          source: "repo-champ2025/*"
+          source: "repo-champ2025/pic.jpg"
           target: "/home/admin/project1/"
           overwrite: true
           debug: true

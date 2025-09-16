@@ -18,10 +18,10 @@ jobs:
       - name: Checkout Repo A (current DevOps2025)
         uses: actions/checkout@v3
 
-      - name: Checkout Repo B (Champ2025-private via GitHub deploy key)
+      - name: Checkout Repo B (champ_private via GitHub deploy key)
         uses: actions/checkout@v3
         with:
-          repository: Manoj9923/Champ2025
+          repository: champ_private
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPOACCESS }}   # 👈 deploy key for GitHub
           ref: main
           path: repo-champ2025

@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: Manoj9923/Champ2025
-          ssh-key: ${{ secrets.GH_DEPLOY_KEY }}   # 👈 deploy key for GitHub
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPOACCESS }}   # 👈 deploy key for GitHub
           ref: main
           path: repo-champ2025
           persist-credentials: false

@@ -27,9 +27,7 @@ jobs:
           path: repo-champ2025
           persist-credentials: false
           ssh-strict: false
-
-        env:
-          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+          exclude: ".git,.github"
 
       - name: Copy file from Champ2025 repo to server
         uses: appleboy/scp-action@v0.1.7

@@ -1,10 +1,18 @@
 name: Hello World
 
-on: 
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: "Target server hostname or IP"
+        required: true
+      user:
+        description: "SSH username"
+        required: true
 
 jobs:
   hello: 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: print message
         run: |

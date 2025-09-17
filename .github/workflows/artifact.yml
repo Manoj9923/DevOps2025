@@ -38,6 +38,12 @@ jobs:
           name: deploy-artifact
           path: artifact/
 
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-artifact
+          path: artifact
+
       - name: Copy artifact to server
         uses: appleboy/scp-action@v0.1.7
         with:

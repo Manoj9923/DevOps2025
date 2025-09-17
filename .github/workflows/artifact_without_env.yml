@@ -11,8 +11,6 @@ on:
 jobs:
   deployment_environment_build-artifact:
     runs-on: self-hosted
-    environment: development
-    
     steps:
       - name: Checkout Repo A (current DevOps2025)
         uses: actions/checkout@v3

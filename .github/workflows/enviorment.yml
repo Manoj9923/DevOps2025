@@ -1,0 +1,47 @@
+name: Transfering file from cross repo using enviroment
+on:
+  workflow_dispatch:
+    inputs:
+      server_ip:
+        description: "Traget Server Hostname/IP:"
+        required: true
+      user_name: 
+        description: "User Name:"
+        required: true
+jobs:
+  deployment_ennviormnet:
+    runs-on: self-hosted
+    environment: development
+    
+    steps:
+      - name: Checkout Repo A (current DevOps2025)
+        uses: actions/checkout@v3
+
+      - name: Chekout Repo champ_private (Private Repo)
+        uses: actions/checkout@v3
+        with:
+          repolistory: Manoj9923/champ_private
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPOACCESS }}   # 👈 deploy key for GitHub
+          ref: main
+          path: repo-champ2025
+          persist-credentials: false
+          ssh-strict: false
+
+      - name: Copy file from champ_private repo to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ github.event.inputs.server_ip }}
+          username: ${{ github.event.inputs.server_user }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}     # 👈 key for target server
+          port: 22
+          source: "repo-champ2025/Git_Learning_Day3.pdf"
+          target: "/home/admin/project1/"
+          overwrite: true
+          debug: true
+          
+       
+       
+       
+  
+    
+    

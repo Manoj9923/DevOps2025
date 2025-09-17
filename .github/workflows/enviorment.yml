@@ -5,11 +5,11 @@ on:
       server_ip:
         description: "Traget Server Hostname/IP:"
         required: true
-      user_name: 
+      server_user: 
         description: "User Name:"
         required: true
 jobs:
-  deployment_ennviormnet:
+  deployment_environment:
     runs-on: self-hosted
     environment: development
     

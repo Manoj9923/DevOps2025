@@ -20,7 +20,7 @@ jobs:
       - name: Chekout Repo champ_private (Private Repo)
         uses: actions/checkout@v3
         with:
-          repolistory: Manoj9923/champ_private
+          repository: Manoj9923/champ_private
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPOACCESS }}   # 👈 deploy key for GitHub
           ref: main
           path: repo-champ2025

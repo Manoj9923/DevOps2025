@@ -63,7 +63,7 @@ jobs:
         ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
           sudo mkdir -p /opt/lampp/htdocs
           sudo cp -r /home/${USER}/deploy/* /opt/lampp/htdocs/
-          sudo chown -R daemon:daemon /opt/lampp/htdocs
+          sudo chown -R admin:admin /opt/lampp/htdocs
           sudo chmod -R 755 /opt/lampp/htdocs
           sudo /opt/lampp/lampp restartapache
         EOF

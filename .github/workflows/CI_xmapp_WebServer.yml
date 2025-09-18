@@ -79,5 +79,5 @@ jobs:
  
       - name: Test Website URL
         run: |
-          curl -I http://${{ secrets.SERVER_IP }} | grep "200 OK" || exit 1
+          curl -I http://${{ secrets.HOST }} | grep "200 OK" || exit 1
  

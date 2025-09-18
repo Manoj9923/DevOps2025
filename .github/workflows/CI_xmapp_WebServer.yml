@@ -11,10 +11,10 @@ jobs:
     runs-on: self-hosted
  
     steps:
-      - name: Checkout Repo DevOps2025 (CI pipeline repo)
+      - name: Checkout Repo A (current DevOps2025)
         uses: actions/checkout@v3
- 
-      - name: Checkout Repo champ_private (private via GitHub deploy key)
+
+      - name: Checkout Repo B (champ_private via GitHub deploy key)
         uses: actions/checkout@v3
         with:
           repository: Manoj9923/champ_private

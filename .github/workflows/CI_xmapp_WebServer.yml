@@ -84,6 +84,7 @@ jobs:
 
      - name: Test Website on Remote Server
        run: |
-        curl -IL http://${{ secrets.HOST }} | grep "200 OK" || exit 1
+        # curl -IL http://${{ secrets.HOST }} | grep "200 OK" || exit 1
+        curl -I http://${{ secrets.HOST }}/index.html | grep "200 OK" || exit 1
 
            

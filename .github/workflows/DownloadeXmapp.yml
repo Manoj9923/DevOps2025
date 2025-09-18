@@ -23,11 +23,11 @@ jobs:
        with:
           host: ${{ github.event.inputs.server }}
           username: ${{ github.event.inputs.user }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}
           script: |
            echo "Installing XAMPP ... "
            cd /tmp
-           echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S /tmp/xampp-installer.run --mode unattended
+           sudo -S /tmp/xampp-installer.run --mode unattended
            echo "XAMPP installed successfully."
            echo "Start XAMPP"
            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S /opt/lampp/lampp start

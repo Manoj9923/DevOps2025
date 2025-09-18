@@ -58,7 +58,7 @@ jobs:
  
      - name: Restart Apache in XAMPP
        run: |
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@@${{ secrets.root_password }}${{ secrets.HOST }} \
             "sudo /opt/lampp/lampp restartapache"
  
   test:

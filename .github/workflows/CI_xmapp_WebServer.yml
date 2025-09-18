@@ -1,5 +1,5 @@
 
-name: CI for XAMPP Web Server
+name: CI for XAMPP Web Server 
 
 on:
   push:

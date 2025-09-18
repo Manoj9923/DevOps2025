@@ -34,32 +34,41 @@ jobs:
           name: website-code
           path: website.tar.gz
   deploy:
-    name: Deploy Stage - Transfer to XAMPP Server
-    runs-on: self-hosted
-    needs: build
+    - name: Deploy Stage - Transfer to XAMPP Server
+      runs-on: self-hosted
+      needs: build
 
-    steps:
-     - name: Download Website Artifact
-       uses: actions/download-artifact@v4
-       with:
-        name: website-code
-        path: .
+      steps:
+       - name: Download Website Artifact
+         uses: actions/download-artifact@v4
+         with:
+       - name: website-code
+         path: .
 
-     - name: Extract Artifact
-       run: |
-         tar -xzf website.tar.gz
+       - name: Extract Artifact
+         run: |
+           tar -xzf website.tar.gz
 
-    # Step 1: Upload files to user's home dir
-     - name: Copy Files to XAMPP Server via SSH
-       run: |
+       - name: Upload Files to Staging Directory (no sudo needed)
+         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r * ${{ secrets.USERNAME }}@${{ secrets.root_password }}@${{ secrets.HOST }}:/opt/lampp/htdocs/
- 
-     - name: Restart Apache in XAMPP
-       run: |
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.root_password }}@${{ secrets.HOST }} \
-            "sudo /opt/lampp/lampp restartapache"
+        # Upload to user's home directory
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r * \
+          ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/${{ secrets.USERNAME }}/deploy/
+
+       - name: Move Files into XAMPP htdocs (with sudo)
+         run: |
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
+          "sudo mkdir -p /opt/lampp/htdocs && \
+          sudo mv /home/${{ secrets.USERNAME }}/deploy/* /opt/lampp/htdocs/ && \
+          sudo chown -R daemon:daemon /opt/lampp/htdocs && \
+          sudo chmod -R 755 /opt/lampp/htdocs"
+
+       - name: Restart Apache in XAMPP
+         run: |
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
+          "sudo /opt/lampp/lampp restartapache"
  
   test:
     name: Test Stage - Validate Website

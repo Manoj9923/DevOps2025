@@ -51,13 +51,13 @@ jobs:
 
     # Step 1: Upload files to user's home dir
      - name: Copy Files to XAMPP Server via SSH
-        run: |
+       run: |
           echo "${{ secrets.SERVER_SSH_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no -r * ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/lampp/htdocs/
  
-      - name: Restart Apache in XAMPP
-        run: |
+     - name: Restart Apache in XAMPP
+       run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
             "sudo /opt/lampp/lampp restartapache"
  

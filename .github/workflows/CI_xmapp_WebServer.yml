@@ -54,11 +54,11 @@ jobs:
        run: |
           echo "${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r * ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/lampp/htdocs/
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r * ${{ secrets.USERNAME }}@${{ secrets.root_password }}@${{ secrets.HOST }}:/opt/lampp/htdocs/
  
      - name: Restart Apache in XAMPP
        run: |
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@@${{ secrets.root_password }}${{ secrets.HOST }} \
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.root_password }}@${{ secrets.HOST }} \
             "sudo /opt/lampp/lampp restartapache"
  
   test:

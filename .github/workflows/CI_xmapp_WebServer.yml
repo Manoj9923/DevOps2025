@@ -63,7 +63,7 @@ jobs:
         run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
             "sudo mkdir -p /opt/lampp/htdocs && \
-             sudo rm -rf /opt/lampp/htdocs/web && \
+             sudo rm -rf /opt/lampp/htdocs/ && \
              sudo mv /home/${{ secrets.USERNAME }}/deploy/* /opt/lampp/htdocs/ && \
              sudo chown -R admin:admin /opt/lampp/htdocs && \
              sudo chmod -R 755 /opt/lampp/htdocs"

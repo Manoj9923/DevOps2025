@@ -7,27 +7,27 @@ on:
   workflow_dispatch:   # allow manual trigger
 
 jobs:
-  build:
+  build:            #Collect website code from repositories.
     name: Build Stage - Checkout Repositories
     runs-on: self-hosted
 
     steps:
-      - name: Checkout Repo A (current DevOps2025)
+      - name: Checkout Repo A (current DevOps2025)    #cloning your repository
         uses: actions/checkout@v3
 
-      - name: Checkout Repo B (champ_private via GitHub deploy key)
+      - name: Checkout Repo B (champ_private via GitHub deploy key)  #cloning ur private repo inside public repo
         uses: actions/checkout@v3
         with:
           repository: Manoj9923/champ_private
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPO1_ACCESS }}
-          ref: main
-          path: web
-          persist-credentials: false
-          ssh-strict: false
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPO1_ACCESS }}    
+          ref: main                                    # capturing source code from main branch of private repo
+          path: web                                    #copy souce code inside "web"
+          persist-credentials: false                   # by default PAT flase  
+          ssh-strict: false                     # By default, Git tries to strictly verify the host key of github.com against the known_hosts file.
 
-      - name: Archive Website Code
+      - name: Archive Website Code          
         run: |
-          tar -czf website.tar.gz -C web .
+          tar -czf website.tar.gz -C web .      
 
       - name: Upload Website Artifact
         uses: actions/upload-artifact@v4
@@ -38,7 +38,7 @@ jobs:
   deploy:
     name: Deploy Stage - Transfer to XAMPP Server
     runs-on: self-hosted
-    needs: build
+    needs: build                            #call the build Job here 
 
     steps:
       - name: Download Website Artifact

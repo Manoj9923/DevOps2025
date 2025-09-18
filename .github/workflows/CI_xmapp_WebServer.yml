@@ -1,15 +1,15 @@
 name: CI for XAMPP Web Server
- 
+
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:   # allow manual trigger
- 
+
 jobs:
   build:
     name: Build Stage - Checkout Repositories
     runs-on: self-hosted
- 
+
     steps:
       - name: Checkout Repo A (current DevOps2025)
         uses: actions/checkout@v3
@@ -18,67 +18,67 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: Manoj9923/champ_private
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPO1_ACCESS }}   # 👈 deploy key for GitHub
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_REPO1_ACCESS }}
           ref: main
           path: web
           persist-credentials: false
           ssh-strict: false
- 
+
       - name: Archive Website Code
         run: |
           tar -czf website.tar.gz -C web .
- 
+
       - name: Upload Website Artifact
         uses: actions/upload-artifact@v4
         with:
           name: website-code
           path: website.tar.gz
+
   deploy:
-      name: Deploy Stage - Transfer to XAMPP Server
-      runs-on: self-hosted
-      needs: build
+    name: Deploy Stage - Transfer to XAMPP Server
+    runs-on: self-hosted
+    needs: build
 
-      steps:
-       - name: Download Website Artifact
-         uses: actions/download-artifact@v4
-         with:
-           name: website-code
-           path: .
+    steps:
+      - name: Download Website Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: website-code
+          path: .
 
-       - name: Extract Artifact
-         run: |
-           tar -xzf website.tar.gz
-           
-       - name: Upload Files to Staging Directory (no sudo needed)
-         run: |
+      - name: Extract Artifact
+        run: |
+          tar -xzf website.tar.gz
+          
+      - name: Upload Files to Staging Directory (no sudo needed)
+        run: |
           echo "${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
-        # Upload to user's home directory
           scp -i private_key.pem -o StrictHostKeyChecking=no -r * \
-           ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/${{ secrets.USERNAME }}/deploy/
+            ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/${{ secrets.USERNAME }}/deploy/
 
-       - name: Move Files into XAMPP htdocs (with sudo)
-         run: |
+      - name: Move Files into XAMPP htdocs (with sudo)
+        run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
-          "sudo mkdir -p /opt/lampp/htdocs && \
-          sudo mv /home/${{ secrets.USERNAME }}/deploy/* /opt/lampp/htdocs/ && \
-          sudo chown -R daemon:daemon /opt/lampp/htdocs && \
-          sudo chmod -R 755 /opt/lampp/htdocs"
+            "sudo mkdir -p /opt/lampp/htdocs && \
+             sudo mv /home/${{ secrets.USERNAME }}/deploy/* /opt/lampp/htdocs/ && \
+             sudo chown -R daemon:daemon /opt/lampp/htdocs && \
+             sudo chmod -R 755 /opt/lampp/htdocs"
 
-       - name: Restart Apache in XAMPP
-         run: |
+      - name: Restart Apache in XAMPP
+        run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
-          "sudo /opt/lampp/lampp restartapache"
- 
+            "sudo /opt/lampp/lampp restartapache"
+
   test:
     name: Test Stage - Validate Website
     runs-on: self-hosted
     needs: deploy
- 
+
     steps:
       - name: Wait for Web Server
         run: sleep 10
- 
+
       - name: Test Website URL
         run: |
           curl -I http://${{ secrets.HOST }} | grep "200 OK" || exit 1

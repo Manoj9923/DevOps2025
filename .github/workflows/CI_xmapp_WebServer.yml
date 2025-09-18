@@ -26,9 +26,7 @@ jobs:
  
       - name: Archive Website Code
         run: |
-          cd web
-          mkdir website
-          tar -czf website.tar.gz -C website .
+          tar -czf website.tar.gz -C web .
  
       - name: Upload Website Artifact
         uses: actions/upload-artifact@v4

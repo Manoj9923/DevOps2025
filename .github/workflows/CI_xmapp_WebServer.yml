@@ -54,6 +54,7 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
+          rm -rf .git .github
           scp -i private_key.pem -o StrictHostKeyChecking=no -r * \
             ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/${{ secrets.USERNAME }}/deploy/
 

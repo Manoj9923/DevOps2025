@@ -52,7 +52,7 @@ jobs:
     # Step 1: Upload files to user's home dir
      - name: Copy Files to XAMPP Server via SSH
        run: |
-          echo "${{ secrets.SERVER_SSH_KEY_RUNNERVM }}" > private_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no -r * ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/lampp/htdocs/
  

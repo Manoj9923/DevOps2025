@@ -50,24 +50,17 @@ jobs:
          tar -xzf website.tar.gz
 
     # Step 1: Upload files to user's home dir
-     - name: Upload files to temp dir on server
-       run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}" > private_key.pem
+     - name: Copy Files to XAMPP Server via SSH
+        run: |
+          echo "${{ secrets.SERVER_SSH_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r * \
-          ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/${{ secrets.USERNAME }}/deploy/
-
-    # Step 2: Move files into /opt/lampp/htdocs with sudo
-     - name: Move files into htdocs
-       run: |
-        ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
-          sudo mkdir -p /opt/lampp/htdocs
-          sudo cp -r /home/${USER}/deploy/* /opt/lampp/htdocs/
-          sudo chown -R admin:admin /opt/lampp/htdocs
-          sudo chmod -R 755 /opt/lampp/htdocs
-          sudo /opt/lampp/lampp restartapache
-        EOF
-
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r * ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/lampp/htdocs/
+ 
+      - name: Restart Apache in XAMPP
+        run: |
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
+            "sudo /opt/lampp/lampp restartapache"
+ 
   test:
     name: Test Stage - Validate Website
     runs-on: self-hosted
@@ -80,4 +73,3 @@ jobs:
       - name: Test Website URL
         run: |
           curl -I http://${{ secrets.HOST }} | grep "200 OK" || exit 1
- 

@@ -82,8 +82,10 @@ jobs:
       - name: Wait for Web Server
         run: sleep 10
 
-      - name: Test Website URL
+      - name: Test Website on Remote Server
         run: |
-          sudo /opt/lampp/lampp status
-          sudo ss -tulpn | grep :80
-          curl -I http://${{ secrets.HOST }} | grep "200 OK" || exit 1
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
+           "sudo /opt/lampp/lampp status && \
+            sudo ss -tulpn | grep :80 && \
+            curl -I http://localhost | grep '200 OK' || exit 1"
+

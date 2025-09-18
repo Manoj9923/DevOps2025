@@ -58,6 +58,8 @@ jobs:
  
       - name: Restart Apache in XAMPP
         run: |
+          sudo chown -R admin:admin /opt/lampp/htdocs
+          sudo chmod -R 775 /opt/lampp/htdocs
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
             "sudo /opt/lampp/lampp restartapache"
  

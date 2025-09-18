@@ -34,7 +34,7 @@ jobs:
           name: website-code
           path: website.tar.gz
   deploy:
-    - name: Deploy Stage - Transfer to XAMPP Server
+      name: Deploy Stage - Transfer to XAMPP Server
       runs-on: self-hosted
       needs: build
 
@@ -42,20 +42,20 @@ jobs:
        - name: Download Website Artifact
          uses: actions/download-artifact@v4
          with:
-       - name: website-code
-         path: .
+           name: website-code
+           path: .
 
        - name: Extract Artifact
          run: |
            tar -xzf website.tar.gz
-
+           
        - name: Upload Files to Staging Directory (no sudo needed)
          run: |
           echo "${{ secrets.SSH_PRIVATE_KEY_RUNNERVM }}" > private_key.pem
           chmod 600 private_key.pem
         # Upload to user's home directory
           scp -i private_key.pem -o StrictHostKeyChecking=no -r * \
-          ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/${{ secrets.USERNAME }}/deploy/
+           ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/home/${{ secrets.USERNAME }}/deploy/
 
        - name: Move Files into XAMPP htdocs (with sudo)
          run: |

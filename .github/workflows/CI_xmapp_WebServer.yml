@@ -79,11 +79,11 @@ jobs:
     needs: deploy
 
     steps:
-      - name: Wait for Web Server
-        run: sleep 10
+     - name: Wait for Web Server
+       run: sleep 10
 
-      - name: Test Website on Remote Server
-        run: |
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
-           "curl -I http://localhost | grep '200 OK' || exit 1"
+     - name: Test Website on Remote Server
+       run: |
+        curl -IL http://${{ secrets.HOST }} | grep "200 OK" || exit 1
+
            

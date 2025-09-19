@@ -37,7 +37,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            XAMPP_VERSION=8.1.24-0
+            XAMPP_VERSION=8.0.30-0
       - name: Run container (smoke test)
         run: |
           # run container in background mapped to host port 8080

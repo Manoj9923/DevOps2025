@@ -44,7 +44,7 @@ jobs:
           docker run -d --name xampp-test -p 8080:80 ${{ env.IMAGE_NAME }}:latest
           echo "Waiting for container to start..."
           for i in {1..12}; do
-            if curl -sf http://localhost:8080 >/dev/null; then
+            if curl -IL http://localhost:8080 >/dev/null; then
               echo "Service is up"
               break
             fi

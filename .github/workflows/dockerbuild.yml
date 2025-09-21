@@ -44,15 +44,15 @@ jobs:
           # run container in background mapped to host port 8080
           docker run -d --name xampp-test -p 8080:80 ${{ env.IMAGE_NAME }}:latest
           echo "Waiting for container to start..."
-          for i in {1..12}; do
-            if curl -sf http://localhost:8080 >/dev/null; then
+          for i in $(seq 1 24); do
+            if curl -sfIL http://localhost:8080 >/dev/null; then
               echo "Service is up"
               break
             fi
             sleep 5
           done
           # fetch a short response to verify
-          curl -sf http://localhost:8080 | head -n 5
+          curl -IL http://localhost:8080 | head -n 5
         # Always clean up the container
       - name: Clean up container
         if: always()

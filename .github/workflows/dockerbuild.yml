@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up QEMU (optional multi-arch support)
+      - name: Set up QEMU (optional multi-arch support) #Quick EMUlator-It’s a tool that lets you run software built for one CPU architecture
         uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
@@ -45,7 +45,7 @@ jobs:
           docker run -d --name xampp-test -p 8080:80 ${{ env.IMAGE_NAME }}:latest
           echo "Waiting for container to start..."
           for i in {1..12}; do
-            if curl -IL http://localhost:8080 >/dev/null; then
+            if curl -IL http://${{ secrets.HOST }}:8080 >/dev/null; then
               echo "Service is up"
               break
             fi

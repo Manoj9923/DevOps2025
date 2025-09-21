@@ -52,7 +52,7 @@ jobs:
             sleep 5
           done
           # fetch a short response to verify
-          curl -IL http://localhost:8080 | head -n 5
+          curl -IL http://${{ secrets.HOST }}:8080 | head -n 5
         # Always clean up the container
       - name: Clean up container
         if: always()
